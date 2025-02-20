@@ -14,11 +14,12 @@ return new class extends Migration
         Schema::create('seller', function (Blueprint $table) {
             $table->unsignedBigInteger('id')->primary()->autoIncrement();
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->text('description');
             $table->string('shop_name', 20);
             $table->string('telephone', 15);
             $table->timestamps();
+            
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
