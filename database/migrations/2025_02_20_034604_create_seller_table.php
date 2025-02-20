@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('shop_name', 20);
             $table->string('telephone', 15);
             $table->timestamps();
+            $table->softDeletes();
             
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });

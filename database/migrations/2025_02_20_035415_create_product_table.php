@@ -19,6 +19,7 @@ return new class extends Migration
             $table->text('product_description');
             $table->string('product_image', 255)->nullable();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('seller_id')->references('id')->on('seller')->onDelete('cascade');
         });
