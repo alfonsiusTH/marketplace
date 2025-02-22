@@ -15,7 +15,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id')->primary()->autoIncrement();
             $table->string('name', 30);
             $table->string('email', 30)->unique();
-            $table->string('password', 35);
+            $table->string('password', 255);
             $table->string('telephone', 15);
             $table->timestamps();
             $table->softDeletes();
