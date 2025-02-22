@@ -2,17 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\SellerResource;
 use App\Models\Seller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SellerController extends Controller
 {
+    private function validateSeller(Request $request)
+    {
+        $validated = $request->validate([
+            'shop_name' => 'required|string|max:20',
+            'description' => 'required|string',
+            'telephone' => 'required|string|max:15'
+        ]);
+
+        return $validated;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $currentUser = Auth::user();
+        $sellers = Seller::query()->where('user_id', $currentUser->id)->get();
+        return SellerResource::collection($sellers->loadMissing(['user:id,name,email,telephone']));
     }
 
     /**
@@ -28,7 +42,11 @@ class SellerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $this->validateSeller($request);
+
+        $sellers = Auth::user()->seller()->create($validated);
+
+        return new SellerResource($sellers->loadMissing(['user:id,name,email,telephone']));
     }
 
     /**

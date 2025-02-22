@@ -34,7 +34,10 @@ class AuthenticationController extends Controller
 
         return response()->json([
             'message' => 'User created successfully',
-            'user' => $user
+            'user' => array_merge(
+                ['id' => $user->id],
+                $user->only(['name', 'email', 'telephone'])
+            )
         ], 201);
     }
 
