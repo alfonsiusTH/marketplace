@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthenticationController extends Controller
 {
+    public function showLogin()
+    {
+        return view('auth.login');
+    }
     public function register(Request $request)
     {
         // Validasi Input
