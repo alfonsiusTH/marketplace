@@ -72,7 +72,7 @@
             padding: 0.4rem 15%;
             box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
         }
-        
+
         .get-started-btn {
             background-color: #6069EA;
             color: #EEF3FA;
@@ -100,7 +100,7 @@
                 <img src="" alt="">
             </div>
             <div class="nav-buttons">
-                <button class="btn-login">LOGIN</button>
+                <a href="{{ route('login') }}" class="btn-login text-decoration-none">LOGIN</a>
                 <button class="btn-register">REGISTER</button>
             </div>
         </nav>
