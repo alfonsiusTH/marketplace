@@ -17,6 +17,7 @@ class Seller extends Model
     protected $table = 'seller';
 
     protected $fillable = [
+        'user_id',
         'description',
         'shop_name',
         'telephone',
