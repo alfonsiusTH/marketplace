@@ -43,8 +43,8 @@ class SellerController extends Controller
     public function store(Request $request)
     {
         $validated = $this->validateSeller($request);
-
-        $sellers = Auth::user()->seller()->create($validated);
+        $validated['user_id'] = Auth::user()->id;
+        $sellers = Seller::create($validated);
 
         return new SellerResource($sellers->loadMissing(['user:id,name,email,telephone']));
     }
@@ -68,16 +68,25 @@ class SellerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Seller $seller)
+    public function update(Request $request, $id)
     {
-        //
+        $validated = $this->validateSeller($request);
+        $validated['user_id'] = Auth::user()->id;
+
+        $sellers = Seller::find($id);
+        $sellers->update($validated);
+
+        return new SellerResource($sellers->loadMissing(['user:id,name,email,telephone']));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Seller $seller)
+    public function destroy($id)
     {
-        //
+        $sellers = Seller::find($id);
+        $sellers->delete();
+
+        return new SellerResource($sellers->loadMissing(['user:id,name,email,telephone']));
     }
 }

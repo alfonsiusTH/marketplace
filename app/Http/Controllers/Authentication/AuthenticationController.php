@@ -57,7 +57,7 @@ class AuthenticationController extends Controller
         $user = User::where('email', $request->email)->first();
 
         // Jika Email atau Password Kosong
-        if ($user->email === null && $user->password === null) {
+        if ($user->email === null || $user->password === null) {
             return response()->json([
                 'message' => 'Email dan Password Wajib Diisi!',
             ]);
