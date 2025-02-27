@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SellerController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Authentication\AuthenticationController;
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -16,7 +17,16 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/sellers', [SellerController::class, 'store']);
     Route::put('/sellers/{id}', [SellerController::class, 'update']);
     Route::delete('/sellers/{id}', [SellerController::class, 'destroy']);
+
+    // Product
+    // Route::get('/products/@myProduct', [ProductController::class], 'myProduct'); // Seller Products
+    Route::get('/products/{id}', [ProductController::class, 'showDetail']);
+    Route::post('/products', [ProductController::class, 'store']);
+    Route::post('/products/{id}', [ProductController::class, 'update']);
+    Route::delete('/products/{id}', [ProductController::class, 'destroy']);
 });
+// Product (Public)
+Route::get('/products', [ProductController::class, 'index']);
 
 // Authentication
 Route::post('/register', [AuthenticationController::class, 'register']);
