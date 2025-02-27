@@ -101,7 +101,7 @@
             </div>
             <div class="nav-buttons">
                 <a href="{{ route('login') }}" class="btn-login text-decoration-none">LOGIN</a>
-                <button class="btn-register">REGISTER</button>
+                <a href="{{ route('register') }}" class="btn-register text-decoration-none">REGISTER</a>
             </div>
         </nav>
 
