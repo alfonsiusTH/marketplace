@@ -21,6 +21,7 @@ class Product extends Model
         'product_price',
         'product_description',
         'product_image',
+        'stock'
     ];
 
     public function seller(): BelongsTo {
