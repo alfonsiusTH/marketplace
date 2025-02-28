@@ -14,6 +14,10 @@ class AuthenticationController extends Controller
     {
         return view('auth.login');
     }
+    public function showRegister()
+    {
+        return view('auth.register');
+    }
     public function register(Request $request)
     {
         // Validasi Input

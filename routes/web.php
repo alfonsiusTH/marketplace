@@ -9,3 +9,4 @@ Route::get('/', function () {
 });
 
 Route::get('login', [AuthenticationController::class, 'showLogin'])->name('login');
+Route::get('register', [AuthenticationController::class, 'showRegister'])->name('register');

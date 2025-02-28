@@ -1,0 +1,142 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+:root {
+    --primary-color: #6069ea;
+    --text-color: #ffffff;
+    --background-color: #000000;
+    --secondary-color: #4D518C;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(to top left,
+            var(--text-color) 40%,
+            var(--primary-color) 60%);
+}
+
+.login-container {
+    background: var(--text-color);
+    padding: 34px;
+    width: 400px;
+    border-radius: 10px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+h2 {
+    color: var(--primary-color);
+    margin-bottom: 32px;
+}
+
+.input-group {
+    position: relative;
+    margin: 20px 0;
+    text-align: start;
+}
+
+.input-group label {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    color: var(--secondary-color);
+    font-size: 14px;
+    transition: 0.3s;
+    pointer-events: none;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+    border: 1px solid var(--background-color);
+}
+
+/* Ketika input aktif atau ada teks, label naik ke atas */
+.input-group input:focus+label,
+.input-group input:not(:placeholder-shown)+label {
+    top: 2px;
+    left: 10px;
+    font-size: 12px;
+    color: var(--primary-color);
+}
+
+/* Password Group - untuk icon mata */
+.password-group {
+    position: relative;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: var(--secondary-color);
+    font-size: 16px;
+}
+
+.toggle-password:hover {
+    color: var(--primary-color);
+}
+
+.login-btn {
+    background: var(--primary-color);
+    color: var(--text-color);
+    border: none;
+    padding: 12px;
+    width: 100%;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    transition: 0.3s;
+    margin-top: 18px;
+}
+
+.login-btn:hover {
+    background: #4b54d8;
+}
+
+.register-text {
+    text-align: start;
+    margin-top: 15px;
+    font-size: 14px;
+    color: #ffffff;
+}
+
+.register-text a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.register-text a:hover {
+    text-decoration: underline;
+}
+
+p {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+p a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+p a:hover {
+    text-decoration: underline;
+}
