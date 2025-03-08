@@ -17,6 +17,7 @@ class CartResource extends JsonResource
         return [
             'id' => $this->id,
             'user_data' => $this->whenLoaded('user'),
+            'cart_items' => $this->whenLoaded('cartItems')
         ];
     }
 }

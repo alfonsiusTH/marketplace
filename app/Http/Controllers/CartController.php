@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CartResource;
 use App\Models\Cart;
+use App\Models\CartItems;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
@@ -12,7 +15,13 @@ class CartController extends Controller
      */
     public function index()
     {
-        //
+        $cart = Cart::query()->where('user_id', Auth::id())->first();
+
+        if ($cart) {
+            return new CartResource($cart->loadMissing('user:id,name,email', 'cartItems:id,cart_id,product_id,quantity'));
+        } else {
+            return response()->json(['message' => 'Cart not found'], 404);
+        }
     }
 
     /**
@@ -20,15 +29,39 @@ class CartController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function addToCart(Request $request)
     {
-        //
+
+        $cart = Cart::where('user_id', Auth::id())->first();
+        
+        if(!$cart) {
+            $cart = Cart::create([
+                'user_id' => Auth::id(),
+            ]);
+        }
+
+        $cartItems = CartItems::where('cart_id', $cart->id)
+        ->where('product_id', $request->product_id)
+        ->first();
+
+        if ($cartItems) {
+            $cartItems->quantity += $request->quantity;
+            $cartItems->save();
+        } else {
+            CartItems::create([
+                'cart_id' => $cart->id,
+                'product_id' => $request->product_id,
+                'quantity' => $request->quantity
+            ]);
+        }
+
+        return new CartResource($cart->loadMissing('user:id,name,email', 'cartItems:id,cart_id,product_id,quantity'));
     }
 
     /**
@@ -58,8 +91,16 @@ class CartController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Cart $cart)
+    public function destroy($id)
     {
-        //
+        $cartItems = CartItems::find($id);
+
+        if ($cartItems->cart->user_id !== Auth::id()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $cartItems->delete();
+
+        return response()->json(['message' => 'Cart item deleted successfully'], 200);
     }
 }

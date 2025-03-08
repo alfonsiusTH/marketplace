@@ -14,10 +14,11 @@ return new class extends Migration
         Schema::create('product', function (Blueprint $table) {
             $table->unsignedBigInteger('id')->primary()->autoIncrement();
             $table->unsignedBigInteger('seller_id');
-            $table->string('product_name', 20);
+            $table->string('product_name', 50);
             $table->integer('product_price');
             $table->text('product_description');
             $table->string('product_image', 255)->nullable();
+            $table->boolean('stock');
             $table->timestamps();
             $table->softDeletes();
 
