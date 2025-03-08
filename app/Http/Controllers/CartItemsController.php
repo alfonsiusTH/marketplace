@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CartItems;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CartItemsController extends Controller
 {
@@ -61,5 +62,35 @@ class CartItemsController extends Controller
     public function destroy(CartItems $cartItems)
     {
         //
+    }
+
+    public function increaseQuantity($id) {
+        $cartItems = CartItems::findOrFail($id);
+
+        if ($cartItems->cart->user_id !== Auth::id()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $cartItems->quantity +=1;
+        $cartItems->save();
+
+        return response()->json(['message' => 'Quantity increased successfully',  'quantity' => $cartItems->quantity ?? 0], 200);
+    }
+
+    public function decreaseQuantity($id) {
+        $cartItems = CartItems::findOrFail($id);
+
+        if ($cartItems->cart->user_id !== Auth::id()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        if ($cartItems->quantity > 1) {
+            $cartItems->quantity -= 1;
+            $cartItems->save();
+            return response()->json(['message' => 'Quantity decreased', 'quantity' => $cartItems->quantity]);
+        } else {
+            $cartItems->delete();
+            return response()->json(['message' => 'Item removed from cart']);
+        }
     }
 }
