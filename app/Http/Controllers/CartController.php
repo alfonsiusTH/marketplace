@@ -93,14 +93,6 @@ class CartController extends Controller
      */
     public function destroy($id)
     {
-        $cartItems = CartItems::find($id);
-
-        if ($cartItems->cart->user_id !== Auth::id()) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-
-        $cartItems->delete();
-
-        return response()->json(['message' => 'Cart item deleted successfully'], 200);
+        //
     }
 }

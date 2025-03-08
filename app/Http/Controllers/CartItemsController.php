@@ -59,9 +59,17 @@ class CartItemsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(CartItems $cartItems)
+    public function destroy($id)
     {
-        //
+        $cartItems = CartItems::find($id);
+
+        if ($cartItems->cart->user_id !== Auth::id()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $cartItems->delete();
+
+        return response()->json(['message' => 'Cart item deleted successfully'], 200);
     }
 
     public function increaseQuantity($id) {

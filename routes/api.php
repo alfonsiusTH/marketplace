@@ -30,11 +30,11 @@ Route::middleware('auth:sanctum')->group(function () {
     // Cart
     Route::get('/cart', [CartController::class, 'index']);
     Route::post('/cart/add', [CartController::class, 'addToCart']);
-    Route::delete('/cart/{id}', [CartController::class, 'destroy']);
-
+    
     // CartItems
     Route::patch('/cart-items/{id}/increase', [CartItemsController::class, 'increaseQuantity']);
     Route::patch('/cart-items/{id}/decrease', [CartItemsController::class, 'decreaseQuantity']);
+    Route::delete('/cart-items/{id}', [CartItemsController::class, 'destroy']);
 });
 // Product (Public)
 Route::get('/products', [ProductController::class, 'index']);
