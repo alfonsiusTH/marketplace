@@ -28,10 +28,11 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $product = Product::all();
-        return ProductResource::collection($product->loadMissing('seller:id,shop_name,telephone'));
+        $products = Product::with('seller:id,shop_name,telephone')->get();
 
-        // return view('product', $product);
+        return view('product.index', [
+            'products' => $products
+        ]);
     }
 
     /**
@@ -72,8 +73,8 @@ class ProductController extends Controller
      */
     public function showDetail($id)
     {
-        $product = Product::findOrFail($id);
-        return new ProductResource($product->loadMissing('seller:id,shop_name,telephone'));
+        $product = Product::with('seller:id,shop_name,telephone')->findOrFail($id);
+        return view('product.detail', compact('product'));
     }
 
     /**
@@ -105,7 +106,7 @@ class ProductController extends Controller
             $image = $imageName . '.' . $extension;
 
             $validated['product_image']->storeAs('/images', $image, 'public');
-            $validated['product_image'] = $image;   
+            $validated['product_image'] = $image;
         }
 
         $product->update($validated);
