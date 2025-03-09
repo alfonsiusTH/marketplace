@@ -12,17 +12,20 @@
     <div class="login-container">
         <h2>LOGIN</h2>
 
-        <div class="input-group">
-            <input type="text" id="username" required placeholder="">
-            <label for="username">Username</label>
-        </div>
+        <form method="POST" action="{{ route('login') }}">
+            @csrf
+            <div class="input-group">
+                <input type="email" name="email" id="username" required placeholder="">
+                <label for="username">Email</label>
+            </div>
 
-        <div class="input-group">
-            <input type="password" id="password" required placeholder="">
-            <label for="password">Password</label>
-        </div>
+            <div class="input-group">
+                <input type="password" name="password" id="password" required placeholder="">
+                <label for="password">Password</label>
+            </div>
 
-        <button class="login-btn">LOGIN</button>
+            <button type="submit" class="login-btn">LOGIN</button>
+        </form>
     </div>
 </body>
 
