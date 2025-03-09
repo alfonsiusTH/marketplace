@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class AuthenticationController extends Controller
@@ -51,6 +52,35 @@ class AuthenticationController extends Controller
 
     public function login(Request $request)
     {
+        // // Validasi Input
+        // $validator = Validator::make($request->all(), [
+        //     'email' => 'required|string|max:30|email',
+        //     'password' => 'required|string|min:8'
+        // ]);
+
+        // if ($validator->fails()) {
+        //     return response()->json($validator->errors(), 422);
+        // }
+
+        // // Cek Email ada atau Tidak
+        // $user = User::where('email', $request->email)->first();
+
+        // // Jika Email atau Password Kosong
+        // if ($user->email === null || $user->password === null) {
+        //     return response()->json([
+        //         'message' => 'Email dan Password Wajib Diisi!',
+        //     ]);
+        // }
+
+        // // Jika Email atau Password tidak sesuai
+        // if (!$user || !Hash::check($request->password, $user->password)) {
+        //     return response()->json([
+        //         'message' => 'Email atau Password Salah!',
+        //     ], 401);
+        // }
+
+        // return $user->createToken('user-token')->plainTextToken;
+
         // Validasi Input
         $validator = Validator::make($request->all(), [
             'email' => 'required|string|max:30|email',
@@ -58,27 +88,24 @@ class AuthenticationController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return redirect()->back()->withErrors($validator)->withInput();
         }
 
         // Cek Email ada atau Tidak
         $user = User::where('email', $request->email)->first();
 
-        // Jika Email atau Password Kosong
-        if ($user->email === null || $user->password === null) {
-            return response()->json([
-                'message' => 'Email dan Password Wajib Diisi!',
-            ]);
+        if (!$user) {
+            return redirect()->back()->with('error', 'Email tidak ditemukan!');
         }
 
-        // Jika Email atau Password tidak sesuai
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json([
-                'message' => 'Email atau Password Salah!',
-            ], 401);
+        // Cek Password
+        if (!Hash::check($request->password, $user->password)) {
+            return redirect()->back()->with('error', 'Password salah!');
         }
 
-        return $user->createToken('user-token')->plainTextToken;
+        Auth::login($user);
+
+        return redirect()->route('toko_dashboard')->with('success', 'Berhasil login!');
     }
 
     public function logout(Request $request)
