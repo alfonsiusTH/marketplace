@@ -11,6 +11,10 @@ Route::get('/', function () {
     return view('index');
 });
 
+Route::get('/admin', function () {
+    return view('admin.index');
+});
+
 Route::get('/login', [AuthenticationController::class, 'showLogin'])->name('showLogin');
 Route::post('/login', [AuthenticationController::class, 'Login'])->name('login');
 Route::get('register', [AuthenticationController::class, 'showRegister'])->name('register');
