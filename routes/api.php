@@ -17,24 +17,24 @@ Route::middleware('auth:sanctum')->group(function () {
     // Seller
     Route::get('/sellers', [SellerController::class, 'index']);
     Route::post('/sellers', [SellerController::class, 'store']);
-    Route::put('/sellers/{id}', [SellerController::class, 'update']);
-    Route::delete('/sellers/{id}', [SellerController::class, 'destroy']);
+    Route::put('/sellers/{id}', [SellerController::class, 'update'])->middleware('SellerMiddleware');
+    Route::delete('/sellers/{id}', [SellerController::class, 'destroy'])->middleware('SellerMiddleware');
 
     // Product
-    // Route::get('/products/@myProduct', [ProductController::class], 'myProduct'); // Seller Products
-    Route::get('/products/{id}', [ProductController::class, 'showDetail']);
+    Route::get('/products/owner', [ProductController::class, 'showSellerProducts']);
+    Route::get('/products/{id}', [ProductController::class, 'showDetail'])->middleware('ProductOwner');
     Route::post('/products', [ProductController::class, 'store']);
-    Route::post('/products/{id}', [ProductController::class, 'update']);
-    Route::delete('/products/{id}', [ProductController::class, 'destroy']);
+    Route::post('/products/{id}', [ProductController::class, 'update'])->middleware('ProductOwner');
+    Route::delete('/products/{id}', [ProductController::class, 'destroy'])->middleware('ProductOwner');
 
     // Cart
     Route::get('/cart', [CartController::class, 'index']);
-    Route::post('/cart/add', [CartController::class, 'addToCart']);
+    Route::post('/cart/add', [CartController::class, 'addToCart'])->middleware('CartMiddleware');
     
     // CartItems
-    Route::patch('/cart-items/{id}/increase', [CartItemsController::class, 'increaseQuantity']);
-    Route::patch('/cart-items/{id}/decrease', [CartItemsController::class, 'decreaseQuantity']);
-    Route::delete('/cart-items/{id}', [CartItemsController::class, 'destroy']);
+    Route::patch('/cart-items/{id}/increase', [CartItemsController::class, 'increaseQuantity'])->middleware('CartItemsMiddleware');
+    Route::patch('/cart-items/{id}/decrease', [CartItemsController::class, 'decreaseQuantity'])->middleware('CartItemsMiddleware');
+    Route::delete('/cart-items/{id}', [CartItemsController::class, 'destroy'])->middleware('CartItemsMiddleware');
 });
 // Product (Public)
 Route::get('/products', [ProductController::class, 'index']);
