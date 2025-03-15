@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\CartResource;
 use App\Models\Cart;
+use App\Models\Product;
 use App\Models\CartItems;
 use Illuminate\Http\Request;
+use App\Http\Resources\CartResource;
 use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
@@ -15,22 +16,23 @@ class CartController extends Controller
      */
     public function index()
     {
-        $cart = Cart::query()->where('user_id', Auth::id())->first();
+        $currentUser = Auth::user();
 
-        if ($cart) {
-            return new CartResource($cart->loadMissing('user:id,name,email', 'cartItems:id,cart_id,product_id,quantity'));
-        } else {
+        $carts = Cart::where('user_id', $currentUser->id)
+            ->with('user:id,name,email', 'cartItems:id,cart_id,product_id,quantity')
+            ->get();
+
+        if ($carts->isEmpty()) {
             return response()->json(['message' => 'Cart not found'], 404);
         }
+
+        return CartResource::collection($carts);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        
-    }
+    public function create() {}
 
     /**
      * Store a newly created resource in storage.
@@ -39,16 +41,22 @@ class CartController extends Controller
     {
 
         $cart = Cart::where('user_id', Auth::id())->first();
-        
-        if(!$cart) {
+
+        if (!$cart) {
             $cart = Cart::create([
                 'user_id' => Auth::id(),
             ]);
         }
 
+        $product = Product::find($request->product_id);
+
+        if (!$product) {
+            return response()->json(['message' => 'Product not found or has been deleted'], 404);
+        }
+
         $cartItems = CartItems::where('cart_id', $cart->id)
-        ->where('product_id', $request->product_id)
-        ->first();
+            ->where('product_id', $request->product_id)
+            ->first();
 
         if ($cartItems) {
             $cartItems->quantity += $request->quantity;

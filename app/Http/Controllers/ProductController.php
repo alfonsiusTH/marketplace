@@ -33,6 +33,9 @@ class ProductController extends Controller
         return view('product.index', [
             'products' => $products
         ]);
+        
+        // $product = Product::all();
+        // return ProductResource::collection($product->loadMissing('seller:id,shop_name,telephone'));
     }
 
     /**
@@ -75,6 +78,25 @@ class ProductController extends Controller
     {
         $product = Product::with('seller:id,shop_name,telephone')->findOrFail($id);
         return view('product.detail', compact('product'));
+    }
+
+    public function showSellerProducts() {
+        // Cek apakah user sudah login
+        if (!Auth::check()) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+    
+        // Cari seller berdasarkan user yang sedang login
+        $seller = Seller::where('user_id', Auth::id())->first();
+    
+        if (!$seller) {
+            return response()->json(['message' => 'Access denied. You are not a seller.'], 403);
+        }
+    
+        // Ambil semua produk milik seller tersebut
+        $products = Product::where('seller_id', $seller->id)->get();
+    
+        return ProductResource::collection($products->loadMissing('seller:id,shop_name,telephone'));
     }
 
     /**
